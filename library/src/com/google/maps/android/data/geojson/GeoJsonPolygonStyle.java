@@ -1,9 +1,11 @@
 package com.google.maps.android.data.geojson;
 
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.data.Style;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * A class that allows for GeoJsonPolygon objects to be styled and for these styles to be
@@ -12,7 +14,6 @@ import java.util.Arrays;
  * PolygonOptions docs</a> for more details about the options.}
  */
 public class GeoJsonPolygonStyle extends Style implements GeoJsonStyle {
-
     private final static String[] GEOMETRY_TYPE = {"Polygon", "MultiPolygon", "GeometryCollection"};
 
     /**
@@ -22,7 +23,9 @@ public class GeoJsonPolygonStyle extends Style implements GeoJsonStyle {
         mPolygonOptions = new PolygonOptions();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String[] getGeometryType() {
         return GEOMETRY_TYPE;
@@ -105,6 +108,44 @@ public class GeoJsonPolygonStyle extends Style implements GeoJsonStyle {
     }
 
     /**
+     * Sets the stroke pattern of the GeoJsonPolygon
+     *
+     * @param patterns List of pattern item.
+     */
+    public void setStrokePattern(List<PatternItem> patterns) {
+        mPolygonOptions.strokePattern(patterns);
+        styleChanged();
+    }
+
+    /**
+     * Sets the joint type of the GeoJsonPolygon
+     *
+     * @param type DEFAULT = 0 | BEVEL = 1 | ROUND = 2;
+     */
+    public void setJointType(int type) {
+        mPolygonOptions.strokeJointType(type);
+        styleChanged();
+    }
+
+    /**
+     * Gets the stroke pattern of the GeoJsonPolygon
+     *
+     * @return stroke pattern in a list.
+     */
+    public List<PatternItem> getStrokePattern() {
+        return mPolygonOptions.getStrokePattern();
+    }
+
+    /**
+     * Gets the joint type of the GeoJsonPolygon
+     *
+     * @return stroke joint type.
+     */
+    public int getJointType() {
+        return mPolygonOptions.getStrokeJointType();
+    }
+
+    /**
      * Gets the z index of the GeoJsonPolygon
      *
      * @return z index of the GeoJsonPolygon
@@ -164,6 +205,8 @@ public class GeoJsonPolygonStyle extends Style implements GeoJsonStyle {
         polygonOptions.geodesic(mPolygonOptions.isGeodesic());
         polygonOptions.strokeColor(mPolygonOptions.getStrokeColor());
         polygonOptions.strokeWidth(mPolygonOptions.getStrokeWidth());
+        polygonOptions.strokeJointType(mPolygonOptions.getStrokeJointType());
+        polygonOptions.strokePattern(mPolygonOptions.getStrokePattern());
         polygonOptions.visible(mPolygonOptions.isVisible());
         polygonOptions.zIndex(mPolygonOptions.getZIndex());
         return polygonOptions;
@@ -177,6 +220,8 @@ public class GeoJsonPolygonStyle extends Style implements GeoJsonStyle {
         sb.append(",\n geodesic=").append(isGeodesic());
         sb.append(",\n stroke color=").append(getStrokeColor());
         sb.append(",\n stroke width=").append(getStrokeWidth());
+        sb.append(",\n stroke pattern=").append(getStrokePattern().toString());
+        sb.append(",\n joint type=").append(getJointType());
         sb.append(",\n visible=").append(isVisible());
         sb.append(",\n z index=").append(getZIndex());
         sb.append("\n}\n");
